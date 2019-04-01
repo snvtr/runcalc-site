@@ -71,14 +71,14 @@ def reverse (d, VDOT):
 
 #        print function
 #        print derivative
-#        print t,"-"
+#        print t,'-'
 
         t = t - function/derivative
 
         function   = get_function (d, t, VDOT)
         derivative = get_derivative (d, t, VDOT)
 
-#    print "final:",t,"(iterations:",i,")"
+#    print 'final:',t,'(iterations:',i,')'
     return t        
 
 # end of reverse_vo2()
@@ -93,22 +93,21 @@ for i in params:
     x = i.split('=')
     token.update({x[0]: x[1]})
 
-print "Content-Type: text/html"
-print ""
-print "<HTML><BODY>"
+print('Content-Type: text/html\n')
+print('<HTML><BODY>')
 
-print token['TYPE'],"<BR>\n"
+print(token['TYPE'],'<BR>\n'
 
 if token['TYPE'] == 'RESULT':
     dist = int(token['DISTANCE'])
     time = token['HOUR']+':'+token['MINS']+':'+token['SECS']
-    print "VDOT =", daniels(dist, time)
+    print('VDOT =', daniels(dist, time))
 
 if token['TYPE'] == 'VDOT':
     vo2m = float(token['VO2MAX'])
     dist = 10000 # token['DISTANCE'] 
-    print "Time = ", reverse(int(dist), float(vo2m))
+    print('Time = ', reverse(int(dist), float(vo2m)))
 
 
-print "</BODY></HTML>"
+print('</BODY></HTML>')
 
