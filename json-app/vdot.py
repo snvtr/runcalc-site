@@ -26,10 +26,15 @@ def vdot_app():
 
     # если есть distance - тогда считаем VDOT
     # если есть vdot - тогда считаем набор дистанций
+    # возвращаем:
+    #json_text = '{ "VDOT": "29.35" }'
+    #json_text = '{ "3000": "12:00:00", "5000": "20:00:00" }' etc
 
-    json_text = '{ "VDOT": "29.35" }'
-    # либо:
-    #json_text = '{ "3000": "12:00:00" }'
+    json_text = '{'
+    for i in request.args.keys():
+        json_text += '"' + i + '": "' + request.args.get(i) + '",'
+    
+    json_text += '"stub": "stub"}' 
 
     response = Response(response=json_text,
                         status=200,
