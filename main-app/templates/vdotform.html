@@ -11,6 +11,10 @@
     </p>
 </form>
 
-    {{vdotjson}}
+{% if vdotjson != '' %}
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;VDOT: {{vdotjson.VDOT }}
+{% else %}
+    <p>&nbsp;
+{% endif %}
 
 {% endblock %}

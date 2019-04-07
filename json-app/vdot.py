@@ -120,8 +120,8 @@ def build_json_vdot(distances, vdot):
 
     json_parts = []
     
-    for dist in distances:
-        json_parts.append('"'+str(dist)+'": "'+time_to_str(reverse(dist, vdot))+'" ')
+    for dist in distances.keys():
+        json_parts.append('"'+str(distances[dist])+'": "'+time_to_str(reverse(dist, vdot))+'"')
     
     return '{' + ','.join(json_parts) + '}'
 
@@ -141,8 +141,28 @@ def vdot_app():
     for VDOT returns json_text = '{ "3000": "12:00:00", "5000": "20:00:00" }' etc
     """
     distances = [800, 1000, 1500, 1609.34, 2000, 2414.02, 
-                 3000, 3218.69, 4000, 4828.03, 5000, 6000,
+                 3000, 3218.69, 4828.03, 5000,
                  8046.72, 10000, 15000, 20000, 21097, 30000, 42195]
+
+    distances = {
+                 '800' :     '800m',
+                 '1000' :    '1000m',
+                 '1500' :    '1500m',
+                 '1609.34' : '1 mile',
+                 '2000' :    '2000m',
+                 '2414.02' : '1.5 miles',
+                 '3000' :    '3000m',
+                 '3218.69' : '2 miles',
+                 '4828.03' : '3 miles',
+                 '5000' :    '5 km',
+                 '8046.72' : '5 miles',
+                 '10000' :   '10 km',
+                 '15000' :   '15 km',
+                 '20000' :   '20 km',
+                 '21097' :   'Half-marathon',
+                 '30000' :   '30 km',
+                 '42195' :   'Marathon'
+                }
 
     if request.args.get('distance') is not None:
         json_text = build_json_dist_time(request.args.get('distance'), request.args.get('time_hour')+':'+request.args.get('time_mins')+':'+request.args.get('time_secs'))
@@ -157,4 +177,4 @@ def vdot_app():
     return response
     
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=7070)
+    app.run(host='0.0.0.0', port=7070, debug=True)
