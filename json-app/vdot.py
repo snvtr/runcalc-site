@@ -142,7 +142,7 @@ def vdot_app():
     """
     distances = [800, 1000, 1500, 1609.34, 2000, 2414.02, 
                  3000, 3218.69, 4000, 4828.03, 5000, 6000,
-                 8000, 10000, 15000, 20000, 21097, 30000, 42195]
+                 8046.72, 10000, 15000, 20000, 21097, 30000, 42195]
 
     if request.args.get('distance') is not None:
         json_text = build_json_dist_time(request.args.get('distance'), request.args.get('time_hour')+':'+request.args.get('time_mins')+':'+request.args.get('time_secs'))
