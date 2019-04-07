@@ -1,0 +1,15 @@
+ * Serving Flask app "vdot json app" (lazy loading)
+ * Environment: production
+   WARNING: Do not use the development server in a production environment.
+   Use a production WSGI server instead.
+ * Debug mode: on
+ * Running on http://0.0.0.0:7070/ (Press CTRL+C to quit)
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 159-574-266
+127.0.0.1 - - [07/Apr/2019 19:07:20] "GET /vdot.app?VDOT=40 HTTP/1.1" 200 -
+127.0.0.1 - - [07/Apr/2019 19:11:12] "GET /vdot.app?VDOT=40 HTTP/1.1" 200 -
+127.0.0.1 - - [07/Apr/2019 19:12:19] "GET /vdot.app?VDOT=40 HTTP/1.1" 200 -
+127.0.0.1 - - [07/Apr/2019 19:13:13] "GET /vdot.app?distance=5000&time_hour=00&time_mins=25&time_secs=00 HTTP/1.1" 200 -
+127.0.0.1 - - [07/Apr/2019 19:19:05] "GET /vdot.app?VDOT=38.31%20 HTTP/1.1" 200 -
+127.0.0.1 - - [07/Apr/2019 19:22:52] "GET /vdot.app?VDOT=38.31%20 HTTP/1.1" 200 -

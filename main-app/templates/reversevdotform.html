@@ -11,14 +11,15 @@
     <p><input type="submit" value="Submit"></p>
 </form>
 
-{% if vdotjson != '' %} 
+{% if vdotjson != '' %}
     <table border=0>
+    <th>Times for this VDOT:</th>
     {% for i in vdotjson %}
     <tr><td>{{ i.distance }}</td><td>{{ i.time }}</td></tr>
     {% endfor %}
     </table>
 {% else %}
-    {{ vdotjson }} 
+    {{ vdotjson }}
 {% endif %}
 
 {% endblock %}
