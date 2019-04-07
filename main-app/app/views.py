@@ -32,7 +32,7 @@ def vdot():
 def reverse():
 
     mainform = ReverseVDOTForm()
-    
+
     if mainform.validate_on_submit():
         req_str = 'http://localhost:7070/vdot.app?VDOT=' + mainform.vdot.data
         req = requests.get(req_str).json()
@@ -43,5 +43,5 @@ def reverse():
             TempList.append(TempDict)
 
         return render_template('reversevdotform.html', title='results from VDOT', vdotjson=TempList, form=mainform)
-            
+
     return render_template('reversevdotform.html', title='results from VDOT', vdotjson='', form=mainform)
