@@ -2,7 +2,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Enter your values:</h1>
+<h3>Enter your values:</h3>
 <form action="" method="post" name="mainform">
     {{form.hidden_tag()}}
     <p>
@@ -15,7 +15,7 @@
     <table border=0>
     <th>Times for this VDOT:</th>
     {% for i in vdotjson %}
-    <tr><td>{{ i.distance }}</td><td>{{ i.time }}</td></tr>
+    <tr><td>{{ i.distance }}</td><td>&nbsp;</td><td>{{ i.time }}</td></tr>
     {% endfor %}
     </table>
 {% else %}
