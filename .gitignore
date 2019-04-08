@@ -1,1 +1,5 @@
 *.pyc
+.terraform/*
+*.backup
+*.tfstate
+*.tfvars
