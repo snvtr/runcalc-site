@@ -1,5 +1,5 @@
 *.pyc
-.terraform/*
+deploy/terraform/.terraform/*
 *.backup
 *.tfstate
 *.tfvars
