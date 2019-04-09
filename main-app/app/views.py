@@ -4,11 +4,15 @@ from flask import render_template, request, redirect
 from app import app
 from app.forms import VDOTForm, ReverseVDOTForm
 import requests
+import os
 
 ### __subs__() ###
 
 
 ### __main__() ###
+
+json_srv_host = os.environ.get('JSON_SRV_HOST', default='localhost')
+json_srv_port = os.environ.get('JSON_SRV_PORT', default='7070')
 
 @app.route('/', methods=['GET','POST'])
 @app.route('/index.html', methods=['GET','POST'])
@@ -18,11 +22,12 @@ def vdot():
     mainform = VDOTForm()
 
     if mainform.validate_on_submit():
-        req_str = ('http://localhost:7070/vdot.app?distance=' + mainform.distance.data 
-                 + '&time_hour=' + mainform.time_hour.data
-                 + '&time_mins=' + mainform.time_mins.data
-                 + '&time_secs=' + mainform.time_secs.data
-                  )
+        req_str = (''.join(['http://',json_srv_host,':',json_srv_port,
+                   '/vdot.app?distance=',mainform.distance.data, 
+                   '&time_hour=',mmainform.time_hour.data,
+                   '&time_mins=',mainform.time_mins.data,
+                   '&time_secs=',mainform.time_secs.data
+                  ]))
         req = requests.get(req_str)
         return render_template('vdotform.html', title='VDOT from results', vdotjson=req.json(), form=mainform)
 
@@ -34,7 +39,7 @@ def reverse():
     mainform = ReverseVDOTForm()
 
     if mainform.validate_on_submit():
-        req_str = 'http://localhost:7070/vdot.app?VDOT=' + mainform.vdot.data
+        req_str = ''.join(['http://',json_srv_host,':',json_srv_port,'/vdot.app?VDOT=',mainform.vdot.data])
         req = requests.get(req_str).json()
 
         TempList = []
