@@ -32,12 +32,12 @@ resource "google_compute_instance" "main-app" {
     agent = false
     private_key = "${file("~/.ssh/appuser")}"
   }
-#  provisioner "file" {
-#    source      = "files/runcalc.service"
-#    destination = "/tmp/runcalc.service"
-#  }
+  provisioner "file" {
+    source      = "files/runcalc-main-app.service"
+    destination = "/tmp/runcalc-main-app.service"
+  }
   provisioner "remote-exec" {
-    script = "files/deploy-main.sh"
+    script = "files/deploy-main-app.sh"
   }
 }
 
@@ -69,12 +69,12 @@ resource "google_compute_instance" "json-app" {
     agent = false
     private_key = "${file("~/.ssh/appuser")}"
   }
-#  provisioner "file" {
-#    source      = "files/runcalc.service"
-#    destination = "/tmp/runcalc.service"
-#  }
+  provisioner "file" {
+    source      = "files/runcalc-json-app.service"
+    destination = "/tmp/runcalc-json-app.service"
+  }
   provisioner "remote-exec" {
-    script = "files/deploy-json.sh"
+    script = "files/deploy-json-app.sh"
   }
 }
 

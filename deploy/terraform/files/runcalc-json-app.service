@@ -1,0 +1,14 @@
+[Unit]
+Description=Running Calculator JSON server
+After=network.target
+
+[Service]
+Type=simple
+User=user
+WorkingDirectory=/home/user/runcalc-site/json-app
+ExecStart=/usr/bin/python3 vdot.py
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+
