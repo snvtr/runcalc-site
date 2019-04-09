@@ -7,4 +7,4 @@ export JSON_SRV_PORT=7070
 
 git clone https://github.com/snvtr/runcalc-site
 cd runcalc-site/main-app
-python3 run.py > log &
+python3 run.py &
