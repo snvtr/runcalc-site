@@ -23,8 +23,8 @@ def vdot():
 
     if mainform.validate_on_submit():
         req_str = (''.join(['http://',json_srv_host,':',json_srv_port,
-                   '/vdot.app?distance=',mainform.distance.data, 
-                   '&time_hour=',mmainform.time_hour.data,
+                   '/vdot.app?distance=',mainform.distance.data,
+                   '&time_hour=',mainform.time_hour.data,
                    '&time_mins=',mainform.time_mins.data,
                    '&time_secs=',mainform.time_secs.data
                   ]))

@@ -3,8 +3,9 @@ provider "google" {
   project = "${var.project}"
   region  = "${var.region}"
 }
-resource "google_compute_instance" "app" {
-  name          = "runcalc-terraform"
+
+resource "google_compute_instance" "main-app" {
+  name          = "runcalc-main-app"
   machine_type  = "f1-micro"
   zone          = "europe-west1-b"
   # определение загрузочного диска
@@ -17,6 +18,7 @@ resource "google_compute_instance" "app" {
   network_interface {
     # сеть, к которой присоединить данный интерфейс
     network = "default"
+    network_ip = "10.132.0.4"
     # использовать ethemeral ip для доступа из интернет
     access_config {}
   }
@@ -35,9 +37,47 @@ resource "google_compute_instance" "app" {
 #    destination = "/tmp/runcalc.service"
 #  }
   provisioner "remote-exec" {
-    script = "files/deploy.sh"
+    script = "files/deploy-main.sh"
   }
 }
+
+resource "google_compute_instance" "json-app" {
+  name          = "runcalc-json-app"
+  machine_type  = "f1-micro"
+  zone          = "europe-west1-b"
+  # определение загрузочного диска
+  boot_disk {
+    initialize_params {
+      image = "${var.app_disk_image}"
+    }
+  }
+  # определение сетевого интерфейса
+  network_interface {
+    # сеть, к которой присоединить данный интерфейс
+    network = "default"
+    network_ip = "10.132.0.5"
+    # использовать ethemeral ip для доступа из интернет. в принципе этой машине внешний адрес не нужен
+    access_config {}
+  }
+  metadata {
+    ssh-keys = "user:${file(var.public_key_path)}"
+  }
+  tags = ["runcalc-terraform"]
+  connection {
+    type  = "ssh"
+    user  = "user"
+    agent = false
+    private_key = "${file("~/.ssh/appuser")}"
+  }
+#  provisioner "file" {
+#    source      = "files/runcalc.service"
+#    destination = "/tmp/runcalc.service"
+#  }
+  provisioner "remote-exec" {
+    script = "files/deploy-json.sh"
+  }
+}
+
 
 resource "google_compute_firewall" "firewall_8080" {
   name     = "allow-8080-default"
