@@ -16,6 +16,22 @@ import os, sys, math
 
 
 #
+# Balke 15 minute running test
+#
+
+def balke(distance):
+
+    if (distance < 0):
+        return -2
+
+    if (distance > 6500):
+        return -1
+
+    vo2max = 0.172 * (distance / 15 - 133) + 33.3
+
+    return '{:2.2f}'.format(vo2max)
+
+#
 # cooper, cooper_indian_mod:
 # - Get distance/time like for VDOT.
 # - Convert it to Daniels VDOT with daniels().
@@ -170,6 +186,10 @@ def build_json_cooper(distance):
 
     return ''.join(['{ "VO2max Cooper":','"',cooper(int(distance)),'"',',','"VO2max Cooper Indian Mod":','"',cooper_indian_mod(int(distance)),'"','}'])
 
+def build_json_balke(distance):
+
+    return ''.join(['{ "VO2max Balke":','"',balke(int(distance)),'"}'])
+
 ### __main__() ###
 
 app = Flask('vdot json app')
@@ -221,7 +241,7 @@ def vdot_app():
 @app.route('/cooper.app', methods=['GET'])
 def cooper_app():
     """
-    takes distance covered in 12 mins and produces VO2max according by Cooper formula and modified indian Cooper formula:
+    takes distance covered in 12 mins and produces VO2max according to the Cooper's formula and modified indian/Cooper formula:
 
     json_text = { "VO2max (Cooper)": "37.89", "VO2max (Cooper, Indian Mod)": "39.87" }
     """
@@ -234,6 +254,21 @@ def cooper_app():
 
     return response
 
+@app.route('/balke.app', methods=['GET'])
+def balke_app():
+    """
+    takes distance covered in 15 mins and produces VO2max according to the Balke's formula:
+
+    json_text = { "VO2max (Balke)": "37.89" }
+    """
+    if request.args.get('distance') is not None:
+        json_text = build_json_balke(request.args.get('distance'))
+
+    response = Response(response=json_text,
+                        status=200,
+                        mimetype="application/json")
+
+    return response
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=7070, debug=True)

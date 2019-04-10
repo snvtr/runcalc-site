@@ -6,16 +6,15 @@
 <form action="" method="post" name="mainform">
     {{form.hidden_tag()}}
     <p>
-        Distance covered in 12 minutes:{{form.distance(size=4)}}
+        Distance covered in 15 minutes:{{form.distance(size=4)}}
     </p>
     <p><input type="submit" value="Submit"></p>
 </form>
 
-{% if cooper != '' %}
-    <p>VO2max according to Cooper: {{ cooper }}
-    <p>VO2max according to Cooper and some indian scientists: {{ cooper_indian_mod }}
+{% if balke != '' %}
+    <p>VO2max according to Balke: {{ balke }}
 {% else %}
-    {{ cooper }}
+    {{ balke }}
 {% endif %}
 
 {% endblock %}

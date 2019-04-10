@@ -2,7 +2,7 @@
 
 from flask import render_template, request, redirect
 from app import app
-from app.forms import VDOTForm, ReverseVDOTForm, CooperForm
+from app.forms import VDOTForm, ReverseVDOTForm, CooperForm, BalkeForm
 import requests
 import os
 
@@ -63,6 +63,35 @@ def cooper():
         cooper = req['VO2max Cooper']
         cooper_indian_mod = req['VO2max Cooper Indian Mod']
 
-        return render_template('cooperform.html', title='Cooper 12 min VO2max test', cooper=cooper, cooper_indian_mod=cooper_indian_mod, form=mainform)
+        return render_template('cooperform.html',
+                                title='Cooper 12 min VO2max test',
+                                cooper=cooper,
+                                cooper_indian_mod=cooper_indian_mod,
+                                form=mainform)
 
-    return render_template('cooperform.html', title='Cooper 12 min VO2max test', cooper='', cooper_indian_mod='', form=mainform)
+    return render_template('cooperform.html',
+                           title='Cooper 12 min VO2max test',
+                           cooper='',
+                           cooper_indian_mod='',
+                           form=mainform)
+
+@app.route('/balke.html', methods=['GET','POST'])
+def balke():
+
+    mainform = BalkeForm()
+
+    if mainform.validate_on_submit():
+        req_str = ''.join(['http://',json_srv_host,':',json_srv_port,'/balke.app?distance=',mainform.distance.data])
+        req = requests.get(req_str).json()
+
+        balke = req['VO2max Balke']
+
+        return render_template('balkeform.html',
+                                title='Balke 15 min VO2max test',
+                                balke=balke,
+                                form=mainform)
+
+    return render_template('balkeform.html',
+                           title='Balke 15 min VO2max test',
+                           balke='',
+                           form=mainform)

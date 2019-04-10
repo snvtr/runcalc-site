@@ -1,6 +1,6 @@
 from flask import Flask
 
-app = Flask('running calculators')
+app = Flask('Various running calculators')
 app.config.from_object('config')
 
-from app import views
+from app import mainsrv

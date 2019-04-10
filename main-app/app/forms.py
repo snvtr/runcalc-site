@@ -13,3 +13,6 @@ class ReverseVDOTForm(FlaskForm):
 
 class CooperForm(FlaskForm):
     distance  = TextField('distance', validators = [Required()])
+
+class BalkeForm(FlaskForm):
+    distance  = TextField('distance', validators = [Required()])
