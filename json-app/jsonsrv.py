@@ -2,8 +2,8 @@
 
 """
 vdot json server gets either:
-- distance+time or 
-- VDOT as input 
+- distance+time or
+- VDOT as input
 and returns:
 - a json with VDOT for a given distance+time
 - a list of times for a bunch of distances for a given VDOT
@@ -13,6 +13,43 @@ from flask import Flask, request, Response
 import os, sys, math
 
 ## __subs__() ###
+
+
+#
+# cooper, cooper_indian_mod:
+# - Get distance/time like for VDOT.
+# - Convert it to Daniels VDOT with daniels().
+# - Then with reverse() find time for 1.5 miles and put this time into the cooper formulas
+#
+# repeat the same for Balke
+#
+
+def cooper(distance):
+
+    if (distance < 0):
+        return -2
+
+    if (distance > 5000):
+        return -1
+
+    vo2max = (distance - 504.9)/44.73
+
+    return '{:2.2f}'.format(vo2max)
+
+# end of cooper()
+
+def cooper_indian_mod(distance):
+
+    if (distance < 0):
+        return -2
+
+    if (distance > 5000):
+        return -1
+
+    vo2max = 21.01*distance/1000 - 11.04
+
+    return '{:2.2f}'.format(vo2max)
+
 
 def daniels(distance, time):
     """ the main function, converts distance+time to VDOT """
@@ -24,7 +61,7 @@ def daniels(distance, time):
     duration = float(str_to_time(time))
     velocity = float(distance) / duration
 
-# returns vo2max for given distance in meters and time in minutes      
+# returns vo2max for given distance in meters and time in minutes
     return round((-4.60 + 0.182258 * velocity + 0.000104 * math.pow(velocity,2)) / (0.8 + 0.1894393 * math.exp(-0.012778 * duration) + 0.2989558 * math.exp(-0.1932605 * duration)),2)
 
 def get_function(race_d,race_t,race_VDOT):
@@ -46,7 +83,7 @@ def reverse(distance, VDOT):
     """
     Reverse function for daniels(), gets time based on VDOT and distance.
     It approximates the output based on Newton approximation
-    
+
     >>> reverse(5000, 30)
     30.68
     """
@@ -77,7 +114,7 @@ def reverse(distance, VDOT):
     i = 0
 
     while abs(function/derivative) > 0.000001:
-   
+
         i = i + 1
 
         if i > 100:
@@ -119,15 +156,19 @@ def str_to_time(time_str):
 def build_json_vdot(distances, vdot):
 
     json_parts = []
-    
+
     for dist in distances.keys():
         json_parts.append('"'+str(distances[dist])+'": "'+time_to_str(reverse(dist, vdot))+'"')
-    
+
     return '{' + ','.join(json_parts) + '}'
 
 def build_json_dist_time(dist, dist_time):
 
     return '{ "VDOT" : "' + str(daniels(dist, dist_time)) + '"}'
+
+def build_json_cooper(distance):
+
+    return ''.join(['{ "VO2max Cooper":','"',cooper(int(distance)),'"',',','"VO2max Cooper Indian Mod":','"',cooper_indian_mod(int(distance)),'"','}'])
 
 ### __main__() ###
 
@@ -135,8 +176,9 @@ app = Flask('vdot json app')
 
 @app.route('/vdot.app', methods=['GET'])
 def vdot_app():
-    """ returns json to the main server
-    
+    """
+    returns json to the main server
+
     for distance/time returns json_text = '{ "VDOT": "29.35" }'
     for VDOT returns json_text = '{ "3000": "12:00:00", "5000": "20:00:00" }' etc
     """
@@ -175,6 +217,23 @@ def vdot_app():
                         mimetype="application/json")
 
     return response
-    
+
+@app.route('/cooper.app', methods=['GET'])
+def cooper_app():
+    """
+    takes distance covered in 12 mins and produces VO2max according by Cooper formula and modified indian Cooper formula:
+
+    json_text = { "VO2max (Cooper)": "37.89", "VO2max (Cooper, Indian Mod)": "39.87" }
+    """
+    if request.args.get('distance') is not None:
+        json_text = build_json_cooper(request.args.get('distance'))
+
+    response = Response(response=json_text,
+                        status=200,
+                        mimetype="application/json")
+
+    return response
+
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=7070, debug=True)

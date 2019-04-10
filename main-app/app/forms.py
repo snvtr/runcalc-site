@@ -10,3 +10,6 @@ class VDOTForm(FlaskForm):
 
 class ReverseVDOTForm(FlaskForm):
     vdot  = TextField('VDOT', validators = [Required()])
+
+class CooperForm(FlaskForm):
+    distance  = TextField('distance', validators = [Required()])

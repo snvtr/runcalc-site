@@ -2,7 +2,7 @@
 
 from flask import render_template, request, redirect
 from app import app
-from app.forms import VDOTForm, ReverseVDOTForm
+from app.forms import VDOTForm, ReverseVDOTForm, CooperForm
 import requests
 import os
 
@@ -50,3 +50,19 @@ def reverse():
         return render_template('reversevdotform.html', title='results from VDOT', vdotjson=TempList, form=mainform)
 
     return render_template('reversevdotform.html', title='results from VDOT', vdotjson='', form=mainform)
+
+@app.route('/cooper.html', methods=['GET','POST'])
+def cooper():
+
+    mainform = CooperForm()
+
+    if mainform.validate_on_submit():
+        req_str = ''.join(['http://',json_srv_host,':',json_srv_port,'/cooper.app?distance=',mainform.distance.data])
+        req = requests.get(req_str).json()
+
+        cooper = req['VO2max Cooper']
+        cooper_indian_mod = req['VO2max Cooper Indian Mod']
+
+        return render_template('cooperform.html', title='Cooper 12 min VO2max test', cooper=cooper, cooper_indian_mod=cooper_indian_mod, form=mainform)
+
+    return render_template('cooperform.html', title='Cooper 12 min VO2max test', cooper='', cooper_indian_mod='', form=mainform)

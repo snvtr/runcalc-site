@@ -6,7 +6,7 @@ After=network.target
 Type=simple
 User=user
 WorkingDirectory=/home/user/runcalc-site/json-app
-ExecStart=/usr/bin/python3 vdot.py
+ExecStart=/usr/bin/python3 json.py
 Restart=always
 
 [Install]

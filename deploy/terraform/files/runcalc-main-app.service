@@ -5,6 +5,9 @@ After=network.target
 [Service]
 Type=simple
 User=user
+# static IP for the json server:
+Environment="JSON_SRV_HOST=10.132.0.5"
+Environment="JSON_SRV_PORT=7070"
 WorkingDirectory=/home/user/runcalc-site/main-app
 ExecStart=/usr/bin/python3 run.py
 Restart=always
