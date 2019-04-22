@@ -43,24 +43,28 @@ def balke(distance):
 def cooper(distance):
 
     if (distance < 0):
-        return -2
+        return 'error'
 
     if (distance > 5000):
-        return -1
+        return 'error'
 
     vo2max = (distance - 504.9)/44.73
 
     return '{:2.2f}'.format(vo2max)
 
-# end of cooper()
+
+def cooper_from_time(str_time):
+
+    return '{:2.2f}'.format((483 / str_to_time('00:'+str_time)) + 3.5)
+
 
 def cooper_indian_mod(distance):
 
     if (distance < 0):
-        return -2
+        return 'error'
 
     if (distance > 5000):
-        return -1
+        return 'error'
 
     vo2max = 21.01*distance/1000 - 11.04
 
@@ -80,6 +84,7 @@ def daniels(distance, time):
 # returns vo2max for given distance in meters and time in minutes
     return round((-4.60 + 0.182258 * velocity + 0.000104 * math.pow(velocity,2)) / (0.8 + 0.1894393 * math.exp(-0.012778 * duration) + 0.2989558 * math.exp(-0.1932605 * duration)),2)
 
+
 def get_function(race_d,race_t,race_VDOT):
     """ a helper funtion for newton approximation """
 
@@ -88,12 +93,14 @@ def get_function(race_d,race_t,race_VDOT):
 
     return (upper/lower - float(race_VDOT))
 
+
 def get_derivative(race_d,race_t,race_VDOT):
     """ a helper funtion for newton approximation """
 
     upper = ((((0.2989558*math.exp(-0.1932605*race_t))+(0.1894393*math.exp(-0.012778*race_t))+0.8)*((-0.000208)*(race_d**2)*(race_t**-3))-((0.182258)*race_d*(race_t**-2)))-(race_VDOT*((0.2989558)*(math.exp(-0.1932605*race_t))+(0.1894393)*(math.exp(-0.012778*race_t)))))
     lower = (0.2989558 * math.exp(-0.1932605 * race_t) + 0.1894393 * math.exp(-0.012778 * race_t) + 0.8)**2
     return (upper/lower)
+
 
 def reverse(distance, VDOT):
     """
@@ -178,13 +185,21 @@ def build_json_vdot(distances, vdot):
 
     return '{' + ','.join(json_parts) + '}'
 
+
 def build_json_dist_time(dist, dist_time):
 
     return '{ "VDOT" : "' + str(daniels(dist, dist_time)) + '"}'
 
+
 def build_json_cooper(distance):
 
     return ''.join(['{ "VO2max Cooper":','"',cooper(int(distance)),'"',',','"VO2max Cooper Indian Mod":','"',cooper_indian_mod(int(distance)),'"','}'])
+
+
+def build_json_cooper_t(str_time):
+
+    return ''.join(['{ "VO2max Cooper":','"',cooper_from_time(str_time),'"',',','"VO2max Cooper Indian Mod":','"0"','}'])
+
 
 def build_json_balke(distance):
 
@@ -253,6 +268,23 @@ def cooper_app():
                         mimetype="application/json")
 
     return response
+
+@app.route('/cooper_t.app', methods=['GET'])
+def cooper_t_app():
+    """
+    takes distance covered in 12 mins and produces VO2max according to the Cooper's formula and modified indian/Cooper formula:
+
+    json_text = { "VO2max (Cooper)": "37.89", "VO2max (Cooper, Indian Mod)": "39.87" }
+    """
+    if request.args.get('str_time') is not None:
+        json_text = build_json_cooper_t(request.args.get('str_time'))
+
+    response = Response(response=json_text,
+                        status=200,
+                        mimetype="application/json")
+
+    return response
+
 
 @app.route('/balke.app', methods=['GET'])
 def balke_app():

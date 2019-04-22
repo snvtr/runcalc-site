@@ -3,20 +3,18 @@
 
 {% block content %}
 <h3>Enter your values:</h3>
-<form action="" method="post" name="mainform_dist">
+<form action="" method="post" name="mainform_time">
     {{form.hidden_tag()}}
     <p>
-        Distance covered in 12 minutes:{{form.distance(size=4)}}
+        Time (minutes:seconds) to cover 1.5 miles:{{form.str_time(size=5)}}
     </p>
     <p>
-        <input type="submit" value="Submit Distance">
+        <input type="submit" value="Submit Time">
     </p>
 </form>
-   
 
 {% if cooper != '' %}
     <p>VO2max according to Cooper: {{ cooper }}
-    <p>VO2max according to Cooper and some indian scientists: {{ cooper_indian_mod }} 
 {% else %}
     {{ cooper }}
 {% endif %}
