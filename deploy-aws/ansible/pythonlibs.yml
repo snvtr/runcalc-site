@@ -1,0 +1,11 @@
+---
+- name: Install flask, flask-WTF
+  hosts: all
+  become: true
+  tasks:
+  - name: Install flask, flask-WTF
+    apt: "name={{ item }} state=present"
+    with_items:
+      - python3-flask
+      - python3-flaskext.wtf
+
