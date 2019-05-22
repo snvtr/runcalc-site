@@ -2,7 +2,7 @@
 
 from flask import render_template, request, redirect
 from app import app
-from app.forms import VDOTForm, ReverseVDOTForm, CooperForm, BalkeForm
+from app.forms import VDOTForm, ReverseVDOTForm, CooperFormDist, CooperFormTime, BalkeForm
 import requests
 import os
 
@@ -54,10 +54,10 @@ def reverse():
 @app.route('/cooper.html', methods=['GET','POST'])
 def cooper():
 
-    mainform = CooperForm()
+    mainform_dist = CooperFormDist()
 
-    if mainform.validate_on_submit():
-        req_str = ''.join(['http://',json_srv_host,':',json_srv_port,'/cooper.app?distance=',mainform.distance.data])
+    if mainform_dist.validate_on_submit():
+        req_str = ''.join(['http://',json_srv_host,':',json_srv_port,'/cooper.app?distance=',mainform_dist.distance.data])
         req = requests.get(req_str).json()
 
         cooper = req['VO2max Cooper']
@@ -67,13 +67,40 @@ def cooper():
                                 title='Cooper 12 min VO2max test',
                                 cooper=cooper,
                                 cooper_indian_mod=cooper_indian_mod,
-                                form=mainform)
-
+                                form=mainform_dist)
+#    else:
     return render_template('cooperform.html',
                            title='Cooper 12 min VO2max test',
                            cooper='',
                            cooper_indian_mod='',
-                           form=mainform)
+                           form=mainform_dist)
+
+@app.route('/cooper_t.html', methods=['GET','POST'])
+def cooper_t():
+
+    mainform_time = CooperFormTime()
+
+    if mainform_time.validate_on_submit():
+        req_str = ''.join(['http://',json_srv_host,':',json_srv_port,'/cooper_t.app?str_time=',mainform_time.str_time.data])
+
+        req = requests.get(req_str).json()
+
+        cooper = req['VO2max Cooper']
+#        cooper_indian_mod = req['VO2max Cooper Indian Mod']
+
+        return render_template('cooperform_t.html',
+                               title='Cooper 12 min VO2max test',
+                               cooper=cooper,
+                               cooper_indian_mod='',
+                               form=mainform_time)
+#    else:
+    return render_template('cooperform_t.html',
+                           title='Cooper 12 min VO2max test',
+                           cooper='',
+                           cooper_indian_mod='',
+                           form=mainform_time)
+
+
 
 @app.route('/balke.html', methods=['GET','POST'])
 def balke():

@@ -11,8 +11,12 @@ class VDOTForm(FlaskForm):
 class ReverseVDOTForm(FlaskForm):
     vdot  = TextField('VDOT', validators = [Required()])
 
-class CooperForm(FlaskForm):
+class CooperFormDist(FlaskForm):
     distance  = TextField('distance', validators = [Required()])
+
+class CooperFormTime(FlaskForm):
+    # this field needs to be split into min:sec
+    str_time  = TextField('str_time', validators = [Required()])
 
 class BalkeForm(FlaskForm):
     distance  = TextField('distance', validators = [Required()])
