@@ -10,7 +10,6 @@ resource "aws_key_pair" "auth" {
 }
 
 resource "aws_security_group" "this" {
-  #count = "${var.create && ! var.use_name_prefix ? 1 : 0}"
 
   name        = "this"
   description = "this security group"
@@ -31,5 +30,9 @@ resource "aws_instance" "runcalc-main-app" {
   ]
 
   key_name = "local_user"
+
+  provisioner "remote-exec" {
+    script = "../files/deploy.sh"
+  }
 
 }

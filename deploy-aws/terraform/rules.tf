@@ -1,7 +1,6 @@
 resource "aws_security_group_rule" "ingress_rule_ssh" {
-#  #count = "${var.create ? length(var.ingress_rules) : 0}"
 
-  security_group_id = "sg-0af15a407cf764fc7"
+  security_group_id = "${aws_security_group.this.id}"
   type              = "ingress"
 
   cidr_blocks      = ["0.0.0.0/0"]
@@ -13,9 +12,8 @@ resource "aws_security_group_rule" "ingress_rule_ssh" {
 }
 
 resource "aws_security_group_rule" "ingress_rule_http" {
-#  #count = "${var.create ? length(var.ingress_rules) : 0}"
 
-  security_group_id = "sg-0af15a407cf764fc7"
+  security_group_id = "${aws_security_group.this.id}"
   type              = "ingress"
 
   cidr_blocks      = ["0.0.0.0/0"]
@@ -23,5 +21,31 @@ resource "aws_security_group_rule" "ingress_rule_http" {
 
   from_port = "80"
   to_port   = "80"
+  protocol  = "tcp"
+}
+
+resource "aws_security_group_rule" "ingress_rule_http_8080" {
+
+  security_group_id = "${aws_security_group.this.id}"
+  type              = "ingress"
+
+  cidr_blocks      = ["0.0.0.0/0"]
+  description      = "this security group rule http 8080"
+
+  from_port = "8080"
+  to_port   = "8080"
+  protocol  = "tcp"
+}
+
+resource "aws_security_group_rule" "egress_rule_all" {
+
+  security_group_id = "${aws_security_group.this.id}"
+  type              = "egress"
+
+  cidr_blocks      = ["0.0.0.0/0"]
+  description      = "this security group allow all tcp traffic out"
+
+  from_port = "0"
+  to_port   = "65535"
   protocol  = "tcp"
 }
